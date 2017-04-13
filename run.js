@@ -65,7 +65,7 @@ const benchmarkFns = {
     }
   },
   "read-json-fast-prod": {
-    name: "read .json file, prod",
+    name: "read .json file fast parse, prod",
     fn: () => {
       const ast = fastJsonParse(fs.readFileSync('./react-dom.production.min.json'));
     }
@@ -105,7 +105,7 @@ const benchmarkFns = {
     }
   },
   "read-json-fast-dev": {
-    name: "read .json file, dev",
+    name: "read .json file fast parse, dev",
     fn: () => {
       const ast = fastJsonParse(fs.readFileSync('./react-dom.development.json'));
     }
