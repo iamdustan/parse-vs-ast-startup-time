@@ -13,15 +13,13 @@ const pathFor = mode => path.join(
 const ReactDOMProd = pathFor('production.min');
 const ReactDOMDev = pathFor('development');
 
-const prod = fs.readFileSync(ReactDOMProd, 'utf8');
-const dev = fs.readFileSync(ReactDOMDev, 'utf8');
-
-
 console.time('parse prod');
+const prod = fs.readFileSync(ReactDOMProd, 'utf8');
 const prodAst = babylon.parse(prod);
 console.timeEnd('parse prod');
 
 console.time('parse dev');
+const dev = fs.readFileSync(ReactDOMDev, 'utf8');
 const devAst = babylon.parse(dev);
 console.timeEnd('parse dev');
 
