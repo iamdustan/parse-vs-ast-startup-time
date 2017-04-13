@@ -1,4 +1,5 @@
 const babylon = require('babylon');
+const benchmark = require('benchmark');
 const fs = require('fs');
 const path  = require('path');
 const fastJsonParse = require('fast-json-parse');
@@ -11,68 +12,104 @@ const pathFor = mode => path.join(
   'react-dom.' + mode + '.js'
 );
 
+// set up AST files.
 const ReactDOMProd = pathFor('production.min');
 const ReactDOMDev = pathFor('development');
 
-console.time('parse prod');
 const prod = fs.readFileSync(ReactDOMProd, 'utf8');
 const prodAst = babylon.parse(prod);
-console.timeEnd('parse prod');
+fs.writeFileSync('react-dom.production.min.js', 'module.exports = ' + JSON.stringify(prodAst) + ';');
+fs.writeFileSync('react-dom.production.min-json.json', JSON.stringify(prodAst));
 
-console.time('parse dev');
 const dev = fs.readFileSync(ReactDOMDev, 'utf8');
 const devAst = babylon.parse(dev);
-console.timeEnd('parse dev');
-console.log('');
+fs.writeFileSync('react-dom.development.js', 'module.exports = ' + JSON.stringify(devAst) + ';');
+fs.writeFileSync('react-dom.development-json.json', JSON.stringify(devAst));
 
 
-// console.time('stringify and write prod');
-const stringifiedProdAst = JSON.stringify(prodAst)
-fs.writeFileSync('react-dom.production.min.ast.js', 'module.exports = ' + stringifiedProdAst  + ';');
-fs.writeFileSync('react-dom.production.min.ast', stringifiedProdAst);
-// console.timeEnd('stringify and write prod');
+const benchmarkFns = {
+  "parse-prod": {
+    name: "parse .js code, prod",
+    fn: () => {
+      const prod = fs.readFileSync(ReactDOMProd, 'utf8');
+      const prodAst = babylon.parse(prod);
+    }
+  },
+  "require-js-prod": {
+    name: "require .js AST, prod",
+    fn: () => {
+      const ast = require('./react-dom.production.min.js');
+      delete require.cache[require.resolve('./react-dom.production.min.js')];
+    }
+  },
+  "require-json-prod": {
+    name: "require .json AST, prod",
+    fn: () => {
+      const ast = require('./react-dom.production.min-json');
+      delete require.cache[require.resolve('./react-dom.production.min-json')];
+    }
+  },
+  "read-json-prod": {
+    name: "read .json AST, prod",
+    fn: () => {
+      const ast = JSON.parse(fs.readFileSync('./react-dom.production.min-json.json'));
+    }
+  },
+  "read-json-fast-prod": {
+    name: "read .json AST fast parse, prod",
+    fn: () => {
+      const ast = fastJsonParse(fs.readFileSync('./react-dom.production.min-json.json'));
+    }
+  },
+  "parse-dev": {
+    name: "parse .js code, dev",
+    fn: () => {
+      const dev = fs.readFileSync(ReactDOMDev, 'utf8');
+      const devAst = babylon.parse(prod);
+    }
+  },
+  "require-js-dev": {
+    name: "require .js AST, dev",
+    fn: () => {
+      const ast = require('./react-dom.development.js');
+      delete require.cache[require.resolve('./react-dom.development.js')];
+    }
+  },
+  "require-json-dev": {
+    name: "require .json AST, dev",
+    fn: () => {
+      const ast = require('./react-dom.development-json');
+      delete require.cache[require.resolve('./react-dom.development-json')];
+    }
+  },
+  "read-json-dev": {
+    name: "read .json AST, dev",
+    fn: () => {
+      const ast = JSON.parse(fs.readFileSync('./react-dom.development-json.json'));
+    }
+  },
+  "read-json-fast-dev": {
+    name: "read .json AST fast parse, dev",
+    fn: () => {
+      const ast = fastJsonParse(fs.readFileSync('./react-dom.development-json.json'));
+    }
+  },
+}
 
-// console.time('stringify and write dev');
-const stringifiedDevAst = JSON.stringify(devAst) 
-fs.writeFileSync('react-dom.development.ast.js', 'module.exports = ' + stringifiedDevAst + ';');
-fs.writeFileSync('react-dom.development.ast', stringifiedDevAst);
-// console.timeEnd('stringify and write dev');
+const testArg = process.argv[2];
+const testName = testArg.startsWith('--') ? testArg.substr(2) : testArg;
 
-console.time('require prod ast module');
-require('./react-dom.production.min.ast.js');
-console.timeEnd('require prod ast module');
+const suite = new benchmark.Suite();
 
-console.time('require dev ast module');
-require('./react-dom.development.ast.js');
-console.timeEnd('require dev ast module');
-console.log('');
-
-
-console.log('read+parse prod ast');
-console.time('  total');
-console.time('  read ');
-const prodAstAsString = fs.readFileSync(__dirname + '/react-dom.production.min.ast', 'utf8');
-console.timeEnd('  read ');
-console.time('  parse');
-const x = JSON.parse(prodAstAsString);
-console.timeEnd('  parse');
-console.timeEnd('  total');
-console.time('  fast-json-parse');
-fastJsonParse(prodAstAsString);
-console.timeEnd('  fast-json-parse');
-
-console.log('');
-
-console.log('read+parse dev ast');
-console.time('  total');
-console.time('  read ');
-const devAstAsString = fs.readFileSync(__dirname + '/react-dom.development.ast', 'utf8');
-console.timeEnd('  read ');
-console.time('  parse');
-const y = JSON.parse(devAstAsString);
-console.timeEnd('  parse');
-console.timeEnd('  total');
-console.time('  fast-json-parse');
-fastJsonParse(devAstAsString);
-console.timeEnd('  fast-json-parse');
-
+suite
+  .add(benchmarkFns[testName])
+  .on("complete", function () {
+    for (let index = 0; index < this.length; index++) {
+      const benchmark = this[index];
+      console.log(benchmark.name);
+      console.log(`Mean:    ${Math.round(benchmark.stats.mean * 1000)} ms`);
+      console.log(`Std Dev: ${Math.round(benchmark.stats.deviation * 1000)} ms`);
+      console.log("");
+    }
+  })
+  .run();
