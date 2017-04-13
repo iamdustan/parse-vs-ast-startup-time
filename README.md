@@ -12,61 +12,52 @@ To run:
 ➜  babylon-experiment npm run benchmark-prod
 
 > babylon-experiment@1.0.0 benchmark-prod /Users/sashaaickin/code/parse-vs-ast-startup-time
-> node run.js --parse-prod && node run.js --require-ast-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod && node run.js --read-json-fast-prod
+> node run.js --parse-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod && node run.js --read-json-fast-prod
 
-parse JS code, prod
-Mean:    73 ms
-Std Dev: 11 ms
+parse .js code, prod
+Mean:    72 ms
+Std Dev: 14 ms
 
-require .ast file, prod
-Mean:    176 ms
-Std Dev: 223 ms
+require .js AST, prod
+Mean:    181 ms
+Std Dev: 221 ms
 
-require .js file, prod
-Mean:    168 ms
-Std Dev: 204 ms
+require .json AST, prod
+Mean:    282 ms
+Std Dev: 49 ms
 
-require .json file, prod
-Mean:    272 ms
-Std Dev: 63 ms
-
-read .json file, prod
+read .json AST, prod
 Mean:    238 ms
-Std Dev: 17 ms
+Std Dev: 20 ms
 
-read .json file fast parse, prod
-Mean:    249 ms
-Std Dev: 32 ms
+read .json AST fast parse, prod
+Mean:    235 ms
+Std Dev: 19 ms
 
 ➜  babylon-experiment npm run benchmark-dev
 
 > babylon-experiment@1.0.0 benchmark-dev /Users/sashaaickin/code/parse-vs-ast-startup-time
-> node run.js --parse-dev && node run.js --require-ast-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev && node run.js --read-json-fast-dev
+> node run.js --parse-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev && node run.js --read-json-fast-dev
 
-parse JS code, dev
-Mean:    74 ms
-Std Dev: 13 ms
+parse .js code, dev
+Mean:    73 ms
+Std Dev: 15 ms
 
-require .ast file, dev
-Mean:    390 ms
-Std Dev: 415 ms
+require .js AST, dev
+Mean:    372 ms
+Std Dev: 391 ms
 
-require .js file, dev
-Mean:    405 ms
-Std Dev: 405 ms
+require .json AST, dev
+Mean:    910 ms
+Std Dev: 402 ms
 
-require .json file, dev
-Mean:    708 ms
-Std Dev: 73 ms
+read .json AST, dev
+Mean:    636 ms
+Std Dev: 76 ms
 
-read .json file, dev
-Mean:    631 ms
-Std Dev: 58 ms
-
-read .json file fast parse, dev
-Mean:    615 ms
-Std Dev: 62 ms
-
+read .json AST fast parse, dev
+Mean:    623 ms
+Std Dev: 66 ms
 ```
 
 Random observation: `JSON.stringify(ast, null, 2)` takes ~5x longer than

@@ -18,96 +18,80 @@ const ReactDOMDev = pathFor('development');
 
 const prod = fs.readFileSync(ReactDOMProd, 'utf8');
 const prodAst = babylon.parse(prod);
-fs.writeFileSync('react-dom.production.min.ast', 'module.exports = ' + JSON.stringify(prodAst) + ';');
 fs.writeFileSync('react-dom.production.min.js', 'module.exports = ' + JSON.stringify(prodAst) + ';');
-fs.writeFileSync('react-dom.production.min.json', JSON.stringify(prodAst));
+fs.writeFileSync('react-dom.production.min-json.json', JSON.stringify(prodAst));
 
 const dev = fs.readFileSync(ReactDOMDev, 'utf8');
 const devAst = babylon.parse(dev);
-fs.writeFileSync('react-dom.development.ast', 'module.exports = ' + JSON.stringify(devAst) + ';');
 fs.writeFileSync('react-dom.development.js', 'module.exports = ' + JSON.stringify(devAst) + ';');
-fs.writeFileSync('react-dom.development.json', JSON.stringify(devAst));
+fs.writeFileSync('react-dom.development-json.json', JSON.stringify(devAst));
 
 
 const benchmarkFns = {
   "parse-prod": {
-    name: "parse JS code, prod",
+    name: "parse .js code, prod",
     fn: () => {
       const prod = fs.readFileSync(ReactDOMProd, 'utf8');
       const prodAst = babylon.parse(prod);
     }
   },
-  "require-ast-prod": {
-    name: "require .ast file, prod",
-    fn: () => {
-      const ast = require('./react-dom.production.min.ast');
-      delete require.cache[require.resolve('./react-dom.production.min.ast')];
-    }
-  },
   "require-js-prod": {
-    name: "require .js file, prod",
+    name: "require .js AST, prod",
     fn: () => {
       const ast = require('./react-dom.production.min.js');
       delete require.cache[require.resolve('./react-dom.production.min.js')];
     }
   },
   "require-json-prod": {
-    name: "require .json file, prod",
+    name: "require .json AST, prod",
     fn: () => {
-      const ast = require('./react-dom.production.min.json');
-      delete require.cache[require.resolve('./react-dom.production.min.json')];
+      const ast = require('./react-dom.production.min-json');
+      delete require.cache[require.resolve('./react-dom.production.min-json')];
     }
   },
   "read-json-prod": {
-    name: "read .json file, prod",
+    name: "read .json AST, prod",
     fn: () => {
-      const ast = JSON.parse(fs.readFileSync('./react-dom.production.min.json'));
+      const ast = JSON.parse(fs.readFileSync('./react-dom.production.min-json.json'));
     }
   },
   "read-json-fast-prod": {
-    name: "read .json file fast parse, prod",
+    name: "read .json AST fast parse, prod",
     fn: () => {
-      const ast = fastJsonParse(fs.readFileSync('./react-dom.production.min.json'));
+      const ast = fastJsonParse(fs.readFileSync('./react-dom.production.min-json.json'));
     }
   },
   "parse-dev": {
-    name: "parse JS code, dev",
+    name: "parse .js code, dev",
     fn: () => {
       const dev = fs.readFileSync(ReactDOMDev, 'utf8');
       const devAst = babylon.parse(prod);
     }
   },
-  "require-ast-dev": {
-    name: "require .ast file, dev",
-    fn: () => {
-      const ast = require('./react-dom.development.ast');
-      delete require.cache[require.resolve('./react-dom.development.ast')];
-    }
-  },
   "require-js-dev": {
-    name: "require .js file, dev",
+    name: "require .js AST, dev",
     fn: () => {
       const ast = require('./react-dom.development.js');
       delete require.cache[require.resolve('./react-dom.development.js')];
     }
   },
   "require-json-dev": {
-    name: "require .json file, dev",
+    name: "require .json AST, dev",
     fn: () => {
-      const ast = require('./react-dom.development.json');
-      delete require.cache[require.resolve('./react-dom.development.json')];
+      const ast = require('./react-dom.development-json');
+      delete require.cache[require.resolve('./react-dom.development-json')];
     }
   },
   "read-json-dev": {
-    name: "read .json file, dev",
+    name: "read .json AST, dev",
     fn: () => {
-      const ast = JSON.parse(fs.readFileSync('./react-dom.development.json'));
+      const ast = JSON.parse(fs.readFileSync('./react-dom.development-json.json'));
     }
   },
   "read-json-fast-dev": {
-    name: "read .json file fast parse, dev",
+    name: "read .json AST fast parse, dev",
     fn: () => {
-      const ast = fastJsonParse(fs.readFileSync('./react-dom.development.json'));
+      const ast = fastJsonParse(fs.readFileSync('./react-dom.development-json.json'));
     }
   },
 }
