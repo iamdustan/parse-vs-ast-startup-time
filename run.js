@@ -2,7 +2,6 @@ const babylon = require('babylon');
 const benchmark = require('benchmark');
 const fs = require('fs');
 const path  = require('path');
-const fastJsonParse = require('fast-json-parse');
 
 const pathFor = mode => path.join(
   __dirname,
@@ -55,12 +54,6 @@ const benchmarkFns = {
       const ast = JSON.parse(fs.readFileSync('./react-dom.production.min-json.json'));
     }
   },
-  "read-json-fast-prod": {
-    name: "read .json AST fast parse, prod",
-    fn: () => {
-      const ast = fastJsonParse(fs.readFileSync('./react-dom.production.min-json.json'));
-    }
-  },
   "parse-dev": {
     name: "parse .js code, dev",
     fn: () => {
@@ -86,12 +79,6 @@ const benchmarkFns = {
     name: "read .json AST, dev",
     fn: () => {
       const ast = JSON.parse(fs.readFileSync('./react-dom.development-json.json'));
-    }
-  },
-  "read-json-fast-dev": {
-    name: "read .json AST fast parse, dev",
-    fn: () => {
-      const ast = fastJsonParse(fs.readFileSync('./react-dom.development-json.json'));
     }
   },
 }

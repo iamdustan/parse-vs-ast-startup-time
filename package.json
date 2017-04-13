@@ -4,14 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "benchmark-prod": "node run.js --parse-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod && node run.js --read-json-fast-prod",
-    "benchmark-dev": "node run.js --parse-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev && node run.js --read-json-fast-dev"
+    "benchmark-prod": "node run.js --parse-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod",
+    "benchmark-dev": "node run.js --parse-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev"
   },
   "dependencies": {
     "babel": "^6.23.0",
     "babylon": "^6.16.1",
     "benchmark": "^2.1.4",
-    "fast-json-parse": "^1.0.2",
     "react": "next",
     "react-dom": "next"
   }

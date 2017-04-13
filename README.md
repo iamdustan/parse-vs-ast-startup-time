@@ -12,52 +12,44 @@ To run:
 ➜  babylon-experiment npm run benchmark-prod
 
 > babylon-experiment@1.0.0 benchmark-prod /Users/sashaaickin/code/parse-vs-ast-startup-time
-> node run.js --parse-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod && node run.js --read-json-fast-prod
+> node run.js --parse-prod && node run.js --require-js-prod && node run.js --require-json-prod && node run.js --read-json-prod
 
 parse .js code, prod
-Mean:    72 ms
-Std Dev: 14 ms
+Mean:    75 ms
+Std Dev: 17 ms
 
 require .js AST, prod
-Mean:    181 ms
-Std Dev: 221 ms
+Mean:    184 ms
+Std Dev: 227 ms
 
 require .json AST, prod
-Mean:    282 ms
-Std Dev: 49 ms
+Mean:    252 ms
+Std Dev: 40 ms
 
 read .json AST, prod
-Mean:    238 ms
-Std Dev: 20 ms
-
-read .json AST fast parse, prod
-Mean:    235 ms
-Std Dev: 19 ms
+Mean:    234 ms
+Std Dev: 18 ms
 
 ➜  babylon-experiment npm run benchmark-dev
 
 > babylon-experiment@1.0.0 benchmark-dev /Users/sashaaickin/code/parse-vs-ast-startup-time
-> node run.js --parse-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev && node run.js --read-json-fast-dev
+> node run.js --parse-dev && node run.js --require-js-dev && node run.js --require-json-dev && node run.js --read-json-dev
 
 parse .js code, dev
-Mean:    73 ms
-Std Dev: 15 ms
+Mean:    72 ms
+Std Dev: 16 ms
 
 require .js AST, dev
-Mean:    372 ms
-Std Dev: 391 ms
+Mean:    382 ms
+Std Dev: 403 ms
 
 require .json AST, dev
-Mean:    910 ms
-Std Dev: 402 ms
+Mean:    925 ms
+Std Dev: 418 ms
 
 read .json AST, dev
-Mean:    636 ms
-Std Dev: 76 ms
-
-read .json AST fast parse, dev
-Mean:    623 ms
-Std Dev: 66 ms
+Mean:    625 ms
+Std Dev: 63 ms
 ```
 
 Random observation: `JSON.stringify(ast, null, 2)` takes ~5x longer than
