@@ -1,0 +1,11 @@
+{
+  "name": "babylon-experiment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babylon": "^6.16.1",
+    "react-dom": "next"
+  }
+}
