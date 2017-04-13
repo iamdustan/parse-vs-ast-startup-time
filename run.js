@@ -22,20 +22,49 @@ console.time('parse dev');
 const dev = fs.readFileSync(ReactDOMDev, 'utf8');
 const devAst = babylon.parse(dev);
 console.timeEnd('parse dev');
+console.log('');
 
 
-console.time('stringify and write prod');
-fs.writeFileSync('react-dom.production.min.ast', 'module.exports = ' + JSON.stringify(prodAst) + ';');
-console.timeEnd('stringify and write prod');
+// console.time('stringify and write prod');
+const stringifiedProdAst = JSON.stringify(prodAst)
+fs.writeFileSync('react-dom.production.min.ast.js', 'module.exports = ' + stringifiedProdAst  + ';');
+fs.writeFileSync('react-dom.production.min.ast', stringifiedProdAst);
+// console.timeEnd('stringify and write prod');
 
-console.time('stringify and write dev');
-fs.writeFileSync('react-dom.development.ast', 'module.exports = ' + JSON.stringify(devAst) + ';');
-console.timeEnd('stringify and write dev');
+// console.time('stringify and write dev');
+const stringifiedDevAst = JSON.stringify(devAst) 
+fs.writeFileSync('react-dom.development.ast.js', 'module.exports = ' + stringifiedDevAst + ';');
+fs.writeFileSync('react-dom.development.ast', stringifiedDevAst);
+// console.timeEnd('stringify and write dev');
 
-console.time('require prod ast');
-require('./react-dom.production.min.ast');
-console.timeEnd('require prod ast');
+console.time('require prod ast module');
+require('./react-dom.production.min.ast.js');
+console.timeEnd('require prod ast module');
 
-console.time('require dev ast');
-require('./react-dom.development.ast');
-console.timeEnd('require dev ast');
+console.time('require dev ast module');
+require('./react-dom.development.ast.js');
+console.timeEnd('require dev ast module');
+console.log('');
+
+
+console.log('read+parse prod ast');
+console.time('  total');
+console.time('  read ');
+const prodAstAsString = fs.readFileSync(__dirname + '/react-dom.production.min.ast', 'utf8');
+console.timeEnd('  read ');
+console.time('  parse');
+const x = JSON.parse(prodAstAsString);
+console.timeEnd('  parse');
+console.timeEnd('  total');
+console.log('');
+
+console.log('read+parse dev ast');
+console.time('  total');
+console.time('  read ');
+const devAstAsString = fs.readFileSync(__dirname + '/react-dom.development.ast', 'utf8');
+console.timeEnd('  read ');
+console.time('  parse');
+const y = JSON.parse(devAstAsString);
+console.timeEnd('  parse');
+console.timeEnd('  total');
+

@@ -8,12 +8,22 @@ To run:
 
 ```sh
 ➜  babylon-experiment node run.js
-parse prod: 192.497ms
-parse dev: 194.586ms
-stringify and write prod: 203.352ms
-stringify and write dev: 479.854ms
-require prod ast: 1343.973ms
-require dev ast: 2097.112ms
+parse prod: 211.803ms
+parse dev: 213.261ms
+
+require prod ast module: 1359.452ms
+require dev ast module: 2152.315ms
+
+read+parse prod ast
+  read : 19.035ms
+  parse: 296.376ms
+  total: 315.619ms
+
+read+parse dev ast
+  read : 98.348ms
+  parse: 791.297ms
+  total: 889.840ms
+
 ```
 
 Random observation: `JSON.stringify(ast, null, 2)` takes ~5x longer than
