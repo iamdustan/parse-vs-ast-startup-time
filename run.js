@@ -1,6 +1,7 @@
 const babylon = require('babylon');
 const fs = require('fs');
 const path  = require('path');
+const fastJsonParse = require('fast-json-parse');
 
 const pathFor = mode => path.join(
   __dirname,
@@ -56,6 +57,10 @@ console.time('  parse');
 const x = JSON.parse(prodAstAsString);
 console.timeEnd('  parse');
 console.timeEnd('  total');
+console.time('  fast-json-parse');
+fastJsonParse(prodAstAsString);
+console.timeEnd('  fast-json-parse');
+
 console.log('');
 
 console.log('read+parse dev ast');
@@ -67,4 +72,7 @@ console.time('  parse');
 const y = JSON.parse(devAstAsString);
 console.timeEnd('  parse');
 console.timeEnd('  total');
+console.time('  fast-json-parse');
+fastJsonParse(devAstAsString);
+console.timeEnd('  fast-json-parse');
 
